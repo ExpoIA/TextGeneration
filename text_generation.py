@@ -1,6 +1,11 @@
 import openai
 
 # Functions
+
+def authenticate(priv_key_path = 'openai_private_key.priv'):
+	with open(priv_key_path) as f:
+		openai.api_key = f.read()
+
 def complete_text(text, temperature=0.0, engine="text-davinci-001"):
 	response = openai.Completion.create(
 	        engine=engine,
@@ -9,24 +14,28 @@ def complete_text(text, temperature=0.0, engine="text-davinci-001"):
 
 	return response.choices[0].text.lstrip("\n ")
 
-# Import private key
-with open('openai_private_key.priv') as f:
-	openai.api_key = f.read()
 
-# Complete the user's prompts until it says "EXIT"
 
-print("----------- text_generation_demo_v1 -----------")
-print("Esta demo utiliza GPT-3 para completar el texto introducido por el usuario.")
-print("En caso de querer salir del programa, escribe 'EXIT'")
+# > Execute the app in the terminal
+if __name__ == "__main__":
+	# Import private key
+	with open('openai_private_key.priv') as f:
+		openai.api_key = f.read()
 
-end = False
+	# Complete the user's prompts until it says "EXIT"
 
-while not end:
-	user_prompt = input("<User>: ")
+	print("----------- text_generation_demo_v1 -----------")
+	print("Esta demo utiliza GPT-3 para completar el texto introducido por el usuario.")
+	print("En caso de querer salir del programa, escribe 'EXIT'")
 
-	if user_prompt.upper() == "EXIT":
-		end = True
-	else:
-		openai_response = complete_text(user_prompt)
+	end = False
 
-		print("<GPT-3>:", openai_response)
+	while not end:
+		user_prompt = input("<User>: ")
+
+		if user_prompt.upper() == "EXIT":
+			end = True
+		else:
+			openai_response = complete_text(user_prompt)
+
+			print("<GPT-3>:", openai_response)

@@ -16,10 +16,11 @@ class App(ttk.Frame):
 
 		# Set number of rows and cols
 		self.columnconfigure(index=0, weight=1)
-		self.columnconfigure(index=1, weight=1)
-		self.columnconfigure(index=2, weight=1)
+		self.columnconfigure(index=1, weight=2)
+		self.columnconfigure(index=2, weight=2)
+		self.columnconfigure(index=3, weight=2)
 		self.rowconfigure(index=0, weight=1)
-		self.rowconfigure(index=1, weight=1)
+		self.rowconfigure(index=1, weight=0)
 
 		self.setup_widgets()
 
@@ -38,7 +39,7 @@ class App(ttk.Frame):
 		text_font = Font(family="Gotham", size=14)
 
 		self.text_entry = tk.Text(self, font=text_font, padx=10, pady=10)
-		self.text_entry.grid(row=0, column=0, columnspan=3, padx=20, pady=20, sticky="nsew")
+		self.text_entry.grid(row=0, column=0, columnspan=4, padx=20, pady=20, sticky="nsew")
 		self.text_entry.bind('<Control_L>', self.complete_text_keybind) # Instead of pressing the button, the user can press Crtl to complete the text.
 		self.text_entry.bind('<Control_R>', self.complete_text_keybind)
 
@@ -47,19 +48,27 @@ class App(ttk.Frame):
 		# Complete button
 		self.button_text = tk.StringVar(value="Completar Texto")
 		self.complete_button = ttk.Button(self, textvariable=self.button_text, command=self.complete_text)
-		self.complete_button.grid(row=1, column=1, padx=10, pady=(0, 20))
+		self.complete_button.grid(row=1, column=2, padx=10, pady=(0, 25))
+
+		# Clear button (used to clear the text)
+
+		clear_button_img = tk.PhotoImage(file = 'clear_text_icon.png')
+
+		self.clear_button = ttk.Button(self, image=clear_button_img, command=self.clear_text)
+		self.clear_button.image = clear_button_img
+		self.clear_button.grid(row=1, column=0, padx=0, pady=(0, 20))
 
 		# Language list
 		self.available_languages = ["", "Español", "English"]
 		self.selected_language = tk.StringVar(value=self.available_languages[1])
 		self.language_list = ttk.OptionMenu(self, self.selected_language, *self.available_languages, command=self.changed_language)
-		self.language_list.grid(row=1, column=0, padx=10, pady=(0, 20))
+		self.language_list.grid(row=1, column=1, padx=10, pady=(0, 20))
 
 		# Create a frame to contain the scale and a text label
 		self.num_sentences_frame = tk.Frame(self)
-		self.num_sentences_frame.grid(row=1, column=2, padx=10, pady=(0, 20))
+		self.num_sentences_frame.grid(row=1, column=3, padx=0, pady=(0, 25))
 
-		self.scale_text = tk.StringVar(value="Frases")
+		self.scale_text = tk.StringVar(value="Frases (1-5)")
 		self.scale_label = tk.Label(self.num_sentences_frame, textvariable=self.scale_text)
 		self.scale_label.grid(row=0, column=0)
 
@@ -122,16 +131,18 @@ class App(ttk.Frame):
 			self.text_entry.tag_add("response", pos1, pos2)
 			self.text_entry.tag_config("response", foreground="blue")
 
-
-		# <TODO>
-		# change text color back to normal if the user edits the GPT-3 response
-
 	"""
 	Just like complete_text, but called by using a keybind.
 	"""
 	def complete_text_keybind(self, event):
 		self.complete_text()
 
+
+	"""
+	Used to clear all the text of the window.
+	"""
+	def clear_text(self):
+		self.text_entry.delete('1.0', 'end')
 
 	"""
 	Called when the user selects a language from the menu. It changes the language of the text in the app and also how the GPT-3 API is called.
@@ -142,11 +153,11 @@ class App(ttk.Frame):
 		# Change button text
 		if curr_language == "Español":
 			self.button_text.set("Completar Texto")
-			self.scale_text.set("Frases")
+			self.scale_text.set("Frases (1-5)")
 
 		elif curr_language == "English":
 			self.button_text.set("Complete Text")
-			self.scale_text.set("Sentences")
+			self.scale_text.set("Sentences (1-5)")
 
 
 	"""
@@ -161,7 +172,7 @@ class App(ttk.Frame):
 
 if __name__ == "__main__":
 	root = tk.Tk()
-	root.title("Text Generation demo-v2")
+	root.title("Generación de Textos")
 
 	# Set theme
 	root.tk.call("source", "azure.tcl")

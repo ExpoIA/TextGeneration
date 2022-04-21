@@ -9,4 +9,4 @@ el texto introducido por el usuario.
 2. Exportar conda environment -> ejecutar en terminal 'conda env create --file conda_env_text_generation.yml'
    Este entorno de conda usa python 3.6 y el python package openai
 3. Activar entorno de conda -> ejecutar en terminal 'conda activate text-generation' o 'activate text-generation'
-4. Ejecutar programa text_generation_demo_v1.py -> ejecutar en terminal 'python text_generation_demo_v1.py'
+4. Ejecutar programa gui.py -> ejecutar en terminal 'python gui.py'

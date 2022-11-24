@@ -4,6 +4,7 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter.font import Font
+from PIL import ImageTk, Image  
 
 from text_generation import API
 
@@ -19,8 +20,9 @@ class App(ttk.Frame):
 		self.columnconfigure(index=1, weight=2)
 		self.columnconfigure(index=2, weight=2)
 		self.columnconfigure(index=3, weight=2)
-		self.rowconfigure(index=0, weight=1)
-		self.rowconfigure(index=1, weight=0)
+		self.rowconfigure(index=0, weight=0)
+		self.rowconfigure(index=1, weight=1)
+		self.rowconfigure(index=2, weight=0)
 
 		self.setup_widgets()
 
@@ -35,20 +37,38 @@ class App(ttk.Frame):
 		)
 		self.widgets_frame.columnconfigure(index=0, weight=1)"""
 
+		# Dasci logo at the botton
+		self.frame = tk.Frame(self)
+		self.frame.grid(row=0, column=0, columnspan=4, padx=0, pady=0)
+
+		img_aspect_ration = 0.123 # height / width
+		img_width = int(self.root.winfo_screenwidth()*0.8)
+		img_height = int(img_width*img_aspect_ration)
+		img_size = (img_width, img_height)
+		self.dasci_footer = Image.open("footer_dasci.jpg")
+		self.dasci_footer = self.dasci_footer.resize(img_size, Image.ANTIALIAS)
+		self.dasci_footer = ImageTk.PhotoImage(self.dasci_footer)
+
+		self.footer_label = tk.Label(self.frame, image=self.dasci_footer)
+		self.footer_label.image = self.dasci_footer
+
+		self.footer_label.grid(row=0, column=0)
+
 		# Entry
-		text_font = Font(family="Gotham", size=14)
+		
+		text_font = Font(family="Gotham", size=18)
 
 		self.text_entry = tk.Text(self, font=text_font, padx=10, pady=10)
-		self.text_entry.grid(row=0, column=0, columnspan=4, padx=20, pady=20, sticky="nsew")
-		self.text_entry.bind('<Control_L>', self.complete_text_keybind) # Instead of pressing the button, the user can press Crtl to complete the text.
-		self.text_entry.bind('<Control_R>', self.complete_text_keybind)
+		self.text_entry.grid(row=1, column=0, columnspan=4, padx=20, pady=(10,20), sticky="nsew")
+		#self.text_entry.bind('<Control_L>', self.complete_text_keybind) # Instead of pressing the button, the user can press Crtl to complete the text.
+		#self.text_entry.bind('<Control_R>', self.complete_text_keybind)
 
 		self.text_entry.bind("<Escape>", lambda e: self.text_entry.delete('1.0', 'end'))
 
 		# Complete button
 		self.button_text = tk.StringVar(value="Completar Texto")
 		self.complete_button = ttk.Button(self, textvariable=self.button_text, command=self.complete_text)
-		self.complete_button.grid(row=1, column=2, padx=10, pady=(0, 25))
+		self.complete_button.grid(row=2, column=2, padx=10, pady=(0, 25))
 
 		# Clear button (used to clear the text)
 
@@ -56,17 +76,17 @@ class App(ttk.Frame):
 
 		self.clear_button = ttk.Button(self, image=clear_button_img, command=self.clear_text)
 		self.clear_button.image = clear_button_img
-		self.clear_button.grid(row=1, column=0, padx=0, pady=(0, 20))
+		self.clear_button.grid(row=2, column=0, padx=0, pady=(0, 20))
 
 		# Language list
 		self.available_languages = ["", "Español", "English"]
 		self.selected_language = tk.StringVar(value=self.available_languages[1])
 		self.language_list = ttk.OptionMenu(self, self.selected_language, *self.available_languages, command=self.changed_language)
-		self.language_list.grid(row=1, column=1, padx=10, pady=(0, 20))
+		self.language_list.grid(row=2, column=1, padx=10, pady=(0, 20))
 
 		# Create a frame to contain the scale and a text label
 		self.num_sentences_frame = tk.Frame(self)
-		self.num_sentences_frame.grid(row=1, column=3, padx=0, pady=(0, 25))
+		self.num_sentences_frame.grid(row=2, column=3, padx=0, pady=(0, 25))
 
 		self.scale_text = tk.StringVar(value="Frases (1-5)")
 		self.scale_label = tk.Label(self.num_sentences_frame, textvariable=self.scale_text)
@@ -77,6 +97,7 @@ class App(ttk.Frame):
 		self.num_sentences_bar = ttk.Scale(self.num_sentences_frame, from_=1, to=5, variable=self.num_sentences, \
 			command=self.changed_num_sentences)
 		self.num_sentences_bar.grid(row=0, column=1, padx=(10,0))
+
 
 	"""
 	When the button is pressed, complete the text using GPT-3.

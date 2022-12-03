@@ -9,7 +9,7 @@ class API():
 	@engine OpenAI engine to use
 
 	"""
-	def __init__(self, priv_key_path='openai_private_key.priv', engine="text-davinci-002"):
+	def __init__(self, priv_key_path='openai_private_key.priv', engine="text-davinci-003"):
 		self._authenticate(priv_key_path)
 
 		self.engine = engine

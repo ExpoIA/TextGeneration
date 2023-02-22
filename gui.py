@@ -118,8 +118,9 @@ class App(ttk.Frame):
 				prompt = self.text_entry.get('1.0', 'end-1c')
 
 				# Add the sentence "Responde en español." to the beginning of the prompt if the current language is Spanish
-				if curr_language == "Español":
-					prompt = "Responde en español. " + prompt
+				# Now with GPT-3.5, this doesn't seem necessary
+				# if curr_language == "Español":
+				#	prompt = "Responde en español. " + prompt
 
 				#print("Prompt:", prompt)
 				

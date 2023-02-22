@@ -30,7 +30,7 @@ class API():
 	@response_end Add this string to the beginning of the response given by GPT-3, after applying lstrip() and rstrip()
 	@response_end Add this string to the end of the response given by GPT-3, after applying lstrip() and rstrip()
 	"""
-	def complete_text(self, prompt, temperature=0.95, max_tokens=100, stop=None, 
+	def complete_text(self, prompt, temperature=0.8, max_tokens=100, stop=None, 
 					  prompt_end="\n\n", response_lstrip="", response_rstrip="", response_beginning="", response_end=""):
 		# Remove spaces at the beginning and ending (e.g.: "  hi " -> "hi")
 		prompt = prompt.strip()

@@ -4,9 +4,9 @@
 import tkinter as tk
 from tkinter import ttk
 from tkinter.font import Font
-from PIL import ImageTk, Image  
+from PIL import ImageTk, Image 
 
-from text_generation import API
+from gpt_3 import API
 
 # This class implements all the gui and inherits from tk.Frame
 class App(ttk.Frame):
@@ -191,8 +191,7 @@ class App(ttk.Frame):
 
 		self.num_sentences.set(rounded_val)
 
-
-if __name__ == "__main__":
+def main():
 	root = tk.Tk()
 	root.title("Generación de Textos")
 
